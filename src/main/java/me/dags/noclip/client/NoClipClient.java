@@ -6,7 +6,7 @@ import me.dags.noclip.common.EntityNoClipper;
 import me.dags.noclip.common.NoClipData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.client.CPacketCustomPayload;
+import net.minecraft.network.play.client.CCustomPayloadPacket;
 
 import java.io.File;
 
@@ -19,7 +19,7 @@ public class NoClipClient {
     private static final NoClipData data = new NoClipData();
 
     public static File getGameDir() {
-        return Minecraft.getMinecraft().mcDataDir;
+        return Minecraft.getInstance().gameDirectory;
     }
 
     public static void onTick(boolean inGame) {
@@ -30,8 +30,9 @@ public class NoClipClient {
 
     public static void sendNoClipData() {
         ByteBuf buf = Unpooled.buffer().writeBoolean(NoClipClient.getNoClipData().noClip());
-        CPacketCustomPayload payload = new CPacketCustomPayload(EntityNoClipper.NOCLIP_CHANNEL, new PacketBuffer(buf));
-        Minecraft.getMinecraft().player.connection.sendPacket(payload);
+        CCustomPayloadPacket payload = new CCustomPayloadPacket(EntityNoClipper.NOCLIP_CHANNEL, new PacketBuffer(buf));
+        assert Minecraft.getInstance().player != null;
+        Minecraft.getInstance().player.connection.send(payload);
     }
 
     public static NoClipData getNoClipData() {

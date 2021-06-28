@@ -15,6 +15,7 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "runTick()V", at = @At("RETURN"))
     public void endRunTick(CallbackInfo callbackInfo) {
-        NoClipClient.onTick(Minecraft.getMinecraft().inGameHasFocus);
+        assert Minecraft.getInstance().screen != null;
+        NoClipClient.onTick(Minecraft.getInstance().screen.isPauseScreen());
     }
 }

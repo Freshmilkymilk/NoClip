@@ -11,9 +11,6 @@ public class KeyBind {
     private transient int keyCode = -1;
     private transient boolean heldDown = false;
 
-    public KeyBind() {
-    }
-
     public KeyBind(int keyCode) {
         this.keyName = Keyboard.getKeyName(keyCode);
         this.keyCode = keyCode;

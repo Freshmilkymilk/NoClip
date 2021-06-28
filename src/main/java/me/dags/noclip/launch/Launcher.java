@@ -1,6 +1,7 @@
 package me.dags.noclip.launch;
 
 import net.minecraft.launchwrapper.IClassTransformer;
+import cpw.mods.modlauncher.api.ITransformingClassLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.launch.MixinBootstrap;
