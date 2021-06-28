@@ -2,10 +2,10 @@ package me.dags.noclip.common.mixin;
 
 import me.dags.noclip.common.EntityNoClipper;
 import me.dags.noclip.common.NoClipData;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.PlayerCapabilities;
+import net.minecraft.entity.player.PlayerAbilities;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * @author dags <dags@dags.me>
  */
-@Mixin(EntityPlayer.class)
-public abstract class MixinEntityPlayer extends EntityLivingBase implements EntityNoClipper {
+@Mixin(PlayerEntity.class)
+public abstract class MixinEntityPlayer extends Entity implements EntityNoClipper {
 
     private final NoClipData noClipData = new NoClipData();
     private boolean noClipping = false;
@@ -48,7 +48,6 @@ public abstract class MixinEntityPlayer extends EntityLivingBase implements Enti
         }
     }
 
-    @Override
     public void move(MoverType type, double x, double y, double z) {
         if (getNoClipData().noClip() && getCapabilities().isFlying) {
             this.noClip = true;
@@ -57,13 +56,13 @@ public abstract class MixinEntityPlayer extends EntityLivingBase implements Enti
         super.move(type, x, y, z);
     }
 
-    private PlayerCapabilities getCapabilities() {
-        return EntityPlayer.class.cast(this).capabilities;
+    private PlayerAbilities getCapabilities() {
+        return PlayerEntity.class.cast(this).abilities;
     }
 
     private void sendAbilities() {
-        if (EntityPlayer.class.isInstance(this)) {
-            EntityPlayer.class.cast(this).sendPlayerAbilities();
+        if (PlayerEntity.class.isInstance(this)) {
+            PlayerEntity.class.cast(this).onUpdateAbilities();
         }
     }
 }
